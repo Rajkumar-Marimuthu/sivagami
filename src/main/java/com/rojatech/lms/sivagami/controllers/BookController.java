@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rojatech.lms.sivagami.models.Book;
@@ -19,7 +20,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/books")
-	public Book addBooks(Book book) {
+	public Book addBooks(@RequestBody Book book) {
 		books.add(book);
 		return book;
 	}
