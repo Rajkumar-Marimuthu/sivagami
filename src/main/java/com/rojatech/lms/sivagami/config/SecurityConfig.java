@@ -30,15 +30,26 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
+	// Authentication
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
 	
+	// Authorization
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll()
-				.anyRequest().authenticated());
+		http.csrf().disable().authorizeHttpRequests(authorize -> {
+			try {
+				authorize
+						.requestMatchers("/admin").hasRole("ADMIN")
+						.requestMatchers("/user").hasAnyRole("ADMIN","USER")
+						.requestMatchers("/").permitAll()
+						.and().formLogin();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		return http.build();
 	}
 	
